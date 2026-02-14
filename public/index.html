@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SalesBook (PHP AJAX)</title>
+
+  <!-- Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    :root{
+      --sb-bg: #f6f8fb;
+      --sb-card: #ffffff;
+      --sb-text: #0f172a;
+    }
+    body{
+      font-family: "Poppins", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: var(--sb-bg);
+      color: var(--sb-text);
+    }
+    .sb-navbar{
+      background: linear-gradient(90deg, #0ea5e9, #6366f1);
+    }
+    .sb-card{
+      background: var(--sb-card);
+      border: 0;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(2, 6, 23, .06);
+    }
+    .sb-badge{
+      background: rgba(255,255,255,.2);
+      border: 1px solid rgba(255,255,255,.25);
+    }
+    .table thead th{
+      font-weight: 600;
+    }
+    .btn{
+      border-radius: 12px;
+      font-weight: 600;
+    }
+    .form-control, .form-select{
+      border-radius: 12px;
+      padding: .65rem .85rem;
+    }
+    .sb-muted{ color: rgba(15, 23, 42, .65); }
+  </style>
+</head>
+
+<body>
+  <!-- Top Bar -->
+  <nav class="navbar sb-navbar navbar-dark py-3">
+    <div class="container">
+      <div class="d-flex align-items-center gap-3">
+        <div class="bg-white text-dark rounded-circle d-flex align-items-center justify-content-center"
+             style="width:40px;height:40px;font-weight:700;">SB</div>
+        <div>
+          <div class="fw-bold fs-5 mb-0">SalesBook</div>
+          <div class="small opacity-75">Book sales management • PHP + AJAX</div>
+        </div>
+      </div>
+
+      <span class="badge sb-badge rounded-pill px-3 py-2">Simple • Clean • Fast</span>
+    </div>
+  </nav>
+
+  <div class="container my-4">
+    <div class="row g-4">
+      <!-- LEFT: Books -->
+      <div class="col-lg-7">
+        <div class="card sb-card">
+          <div class="card-body p-4">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+              <div>
+                <h4 class="mb-1">Books</h4>
+                <div class="sb-muted small">Search, add and manage your inventory</div>
+              </div>
+
+              <div class="d-flex gap-2">
+                <div class="input-group">
+                  <span class="input-group-text bg-white" style="border-radius:12px 0 0 12px;">🔎</span>
+                  <input id="q" class="form-control" placeholder="Search title...">
+                </div>
+                <button class="btn btn-primary px-4" onclick="loadBooks()">Search</button>
+              </div>
+            </div>
+
+            <!-- Add Book Form -->
+            <div class="row g-2 mb-3">
+              <div class="col-md-5">
+                <input id="b_title" class="form-control" placeholder="Book title">
+              </div>
+              <div class="col-md-3">
+                <input id="b_price" class="form-control" placeholder="Price" type="number" step="0.01">
+              </div>
+              <div class="col-md-2">
+                <input id="b_stock" class="form-control" placeholder="Stock" type="number">
+              </div>
+              <div class="col-md-2 d-grid">
+                <button class="btn btn-success" onclick="addBook()">+ Add</button>
+              </div>
+            </div>
+
+            <!-- Table -->
+            <div class="table-responsive">
+              <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                  <tr>
+                    <th style="width:70px;">ID</th>
+                    <th>Title</th>
+                    <th style="width:120px;">Price</th>
+                    <th style="width:120px;">Stock</th>
+                  </tr>
+                </thead>
+                <tbody id="books">
+                  <!-- JS fills here -->
+                </tbody>
+              </table>
+            </div>
+
+            <div class="small sb-muted mt-3">
+              Tip: after saving invoice, stock will update automatically.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Create Sale -->
+      <div class="col-lg-5">
+        <div class="card sb-card">
+          <div class="card-body p-4">
+            <h4 class="mb-1">Create Sale</h4>
+            <div class="sb-muted small mb-3">Create invoice quickly with customer & items</div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Customer</label>
+              <select id="customer" class="form-select"></select>
+            </div>
+
+            <div class="row g-2 mb-3">
+              <div class="col-7">
+                <label class="form-label fw-semibold">Book</label>
+                <select id="book" class="form-select"></select>
+              </div>
+              <div class="col-5">
+                <label class="form-label fw-semibold">Qty</label>
+                <input id="qty" class="form-control" type="number" value="1" min="1">
+              </div>
+            </div>
+
+            <div class="d-grid mb-4">
+              <button class="btn btn-outline-primary" onclick="addItem()">+ Add Item</button>
+            </div>
+
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <h5 class="mb-0">Items</h5>
+              <button class="btn btn-sm btn-light" type="button" onclick="clearItemsUI()">
+                Clear
+              </button>
+            </div>
+
+            <ul id="items" class="list-group mb-3">
+              <!-- JS fills here -->
+            </ul>
+
+            <div class="d-grid">
+              <button class="btn btn-primary btn-lg" onclick="createSale()">Save Invoice</button>
+            </div>
+
+            <div class="small sb-muted mt-3">
+              Note: if stock not enough, system will show error.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="text-center small sb-muted mt-4">
+      © <span id="year"></span> SalesBook • Built with Bootstrap 5
+    </footer>
+  </div>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // optional helper to clear UI items
+    function clearItemsUI(){
+      if (typeof saleItems !== "undefined") saleItems = [];
+      const ul = document.getElementById("items");
+      ul.innerHTML = `<li class="list-group-item sb-muted">No items yet. Add book to invoice.</li>`;
+    }
+  </script>
+
+  <script src="app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
