@@ -54,62 +54,16 @@ $q_recent = "
   LIMIT 5
 ";
 $r_recent = mysqli_query($conn, $q_recent);
+
+// Page settings for layout
+$pageTitle = "Dashboard Overview";
+$activePage = "dashboard";
+$cssFile = "dashboard";
+$extraTitle = "System Summary";
+
+// Include header with sidebar and topbar
+require_once __DIR__ . "/../layouts/header.php";
 ?>
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SalesBook Admin</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-<style>
-body{font-family:'Poppins', sans-serif;margin:0;background:#f4f6fb;}
-.sidebar{position:fixed;top:0;left:0;width:250px;height:100vh;background:#111827;padding:25px 15px;color:white;}
-.sidebar h4{font-weight:700;margin-bottom:30px;}
-.sidebar a{display:block;color:#cbd5e1;text-decoration:none;padding:10px 15px;border-radius:10px;margin-bottom:8px;font-weight:500;}
-.sidebar a:hover,.sidebar a.active{background:#1f2937;color:#fff;}
-.main{margin-left:250px;padding:30px;}
-.dashboard-card{background:white;border-radius:15px;padding:20px;box-shadow:0 5px 20px rgba(0,0,0,0.05);}
-.stat-number{font-size:24px;font-weight:700;}
-.topbar{background:white;padding:15px 25px;border-radius:15px;box-shadow:0 5px 20px rgba(0,0,0,0.05);margin-bottom:25px;}
-.profile-top{display:flex;align-items:center;gap:12px;}
-.avatar{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:700;background:#eef2ff;color:#4338ca;}
-.profile-info{line-height:1.2;}
-.small-muted{color:rgba(15,23,42,.65);}
-</style>
-</head>
-
-<body>
-
-<div class="sidebar">
-  <h4>SalesBook</h4>
-  <a href="dashboard.php" class="active">🏠 Dashboard</a>
-  <a href="books.php">📚 Books</a>
-  <a href="customers.php">👤 Customers</a>
-  <a href="sales.php">🧾 Sales</a>
-  <a href="reports.php">📊 Reports</a>
-  <a href="settings.php">⚙ Settings</a>
-</div>
-
-<div class="main">
-
-  <div class="topbar d-flex justify-content-between align-items-center">
-    <div>
-      <h5 class="mb-0">Dashboard Overview</h5>
-      <small class="text-muted">System Summary</small>
-    </div>
-
-    <div class="profile-top">
-      <div class="avatar"><?= strtoupper(substr($adminName,0,1)) ?></div>
-      <div class="profile-info">
-        <div class="fw-semibold"><?= htmlspecialchars($adminName) ?></div>
-        <div class="small small-muted"><?= htmlspecialchars($adminEmail) ?></div>
-      </div>
-    </div>
-  </div>
 
   <!-- Stats -->
   <div class="row g-4 mb-4">
@@ -179,12 +133,7 @@ body{font-family:'Poppins', sans-serif;margin:0;background:#f4f6fb;}
     </div>
   </div>
 
-  <div class="text-center text-muted small mt-4">
-    © <?= date("Y"); ?> SalesBook Admin
-  </div>
-
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+<?php
+// Include footer
+require_once __DIR__ . "/../layouts/footer.php";
+?>

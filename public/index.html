@@ -1,187 +1,293 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>SalesBook (PHP AJAX)</title>
+  <title>SalesBook Pro | POS System</title>
 
-  <!-- Google Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-  <!-- Bootstrap 5 -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
   <style>
-    :root{
-      --sb-bg: #f6f8fb;
-      --sb-card: #ffffff;
-      --sb-text: #0f172a;
+    :root {
+      --sb-main-bg: #f0f2f5;
+      --sb-accent: #4f46e5;
+      --sb-accent-hover: #4338ca;
+      --sb-dark: #1e293b;
+      --sb-card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
     }
-    body{
-      font-family: "Poppins", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: var(--sb-bg);
-      color: var(--sb-text);
+
+    body {
+      font-family: "Inter", system-ui, sans-serif;
+      background-color: var(--sb-main-bg);
+      color: #334155;
     }
-    .sb-navbar{
-      background: linear-gradient(90deg, #0ea5e9, #6366f1);
+
+    /* Navbar / Header Styling */
+    .sb-navbar {
+      background: var(--sb-dark);
+      padding: 1rem 0;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
-    .sb-card{
-      background: var(--sb-card);
-      border: 0;
+
+    .sb-logo-circle {
+      width: 45px;
+      height: 45px;
+      background: linear-gradient(135deg, #6366f1, #a855f7);
+      color: white;
+      font-weight: 800;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Poppins';
+      font-size: 1.25rem;
+    }
+
+    /* Card Enhancements */
+    .sb-card {
+      background: #ffffff;
+      border: none;
+      border-radius: 20px;
+      box-shadow: var(--sb-card-shadow);
+      overflow: hidden;
+    }
+
+    .sb-card-header {
+      padding: 1.5rem 1.5rem 0.5rem;
+      border: none;
+      background: transparent;
+    }
+
+    /* Buttons */
+    .btn {
+      border-radius: 12px;
+      padding: 0.6rem 1.25rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+      background-color: var(--sb-accent);
+      border-color: var(--sb-accent);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--sb-accent-hover);
+      transform: translateY(-1px);
+    }
+
+    /* Form Elements */
+    .form-control, .form-select {
+      border-radius: 12px;
+      padding: 0.75rem 1rem;
+      border: 1px solid #e2e8f0;
+      background-color: #f8fafc;
+    }
+
+    .form-control:focus, .form-select:focus {
+      border-color: var(--sb-accent);
+      box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+      background-color: #ffffff;
+    }
+
+    /* Table Styling */
+    .table thead th {
+      background-color: #f8fafc;
+      color: #64748b;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+      padding: 1rem;
+    }
+
+    .table tbody td {
+      padding: 1rem;
+      vertical-align: middle;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    /* Checkout List */
+    .invoice-container {
+      background: #f8fafc;
+      border: 2px dashed #e2e8f0;
       border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(2, 6, 23, .06);
+      min-height: 180px;
+      max-height: 350px;
+      overflow-y: auto;
     }
-    .sb-badge{
-      background: rgba(255,255,255,.2);
-      border: 1px solid rgba(255,255,255,.25);
+
+    /* Total Display */
+    .grand-total-card {
+      background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+      color: #ffffff;
+      border-radius: 16px;
+      padding: 1.5rem;
     }
-    .table thead th{
-      font-weight: 600;
+
+    .text-info-custom {
+      color: #38bdf8 !important;
     }
-    .btn{
-      border-radius: 12px;
-      font-weight: 600;
+
+    .sb-muted {
+      color: #94a3b8;
+      font-size: 0.875rem;
     }
-    .form-control, .form-select{
-      border-radius: 12px;
-      padding: .65rem .85rem;
-    }
-    .sb-muted{ color: rgba(15, 23, 42, .65); }
   </style>
 </head>
 
 <body>
-  <!-- Top Bar -->
-  <nav class="navbar sb-navbar navbar-dark py-3">
+  <nav class="navbar sb-navbar navbar-dark mb-5">
     <div class="container">
       <div class="d-flex align-items-center gap-3">
-        <div class="bg-white text-dark rounded-circle d-flex align-items-center justify-content-center"
-             style="width:40px;height:40px;font-weight:700;">SB</div>
+        <div class="sb-logo-circle">SB</div>
         <div>
-          <div class="fw-bold fs-5 mb-0">SalesBook</div>
-          <div class="small opacity-75">Book sales management • PHP + AJAX</div>
+          <h1 class="h5 fw-bold text-white mb-0">SalesBook <span class="fw-normal opacity-50">v2.0</span></h1>
+          <p class="small text-white-50 mb-0">Smart Inventory & POS Management</p>
         </div>
       </div>
-
-      <span class="badge sb-badge rounded-pill px-3 py-2">Simple • Clean • Fast</span>
+      <div class="d-none d-md-block">
+        <span class="badge rounded-pill bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-3 py-2">
+          System Online
+        </span>
+      </div>
     </div>
   </nav>
 
-  <div class="container my-4">
+  <div class="container pb-5">
     <div class="row g-4">
-      <!-- LEFT: Books -->
       <div class="col-lg-7">
-        <div class="card sb-card">
+        <div class="card sb-card h-100">
+          <div class="sb-card-header d-flex align-items-center justify-content-between flex-wrap gap-3">
+            <div>
+              <h4 class="fw-bold mb-1 text-dark">Book Inventory</h4>
+              <p class="sb-muted mb-0">Manage and track your available books</p>
+            </div>
+            <div class="d-flex gap-2">
+              <div class="input-group" style="max-width: 250px;">
+                <input id="q" class="form-control" placeholder="Search...">
+                <button class="btn btn-outline-secondary border-start-0" onclick="loadBooks()">🔎</button>
+              </div>
+            </div>
+          </div>
+
           <div class="card-body p-4">
-            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
-              <div>
-                <h4 class="mb-1">Books</h4>
-                <div class="sb-muted small">Search, add and manage your inventory</div>
-              </div>
-
-              <div class="d-flex gap-2">
-                <div class="input-group">
-                  <span class="input-group-text bg-white" style="border-radius:12px 0 0 12px;">🔎</span>
-                  <input id="q" class="form-control" placeholder="Search title...">
+            <div class="bg-light p-3 rounded-4 mb-4 border border-white">
+              <label class="form-label small fw-bold text-dark opacity-50 mb-2">QUICK ADD NEW BOOK</label>
+              <div class="row g-2">
+                <div class="col-md-5">
+                  <input id="b_title" class="form-control shadow-sm" placeholder="Title">
                 </div>
-                <button class="btn btn-primary px-4" onclick="loadBooks()">Search</button>
+                <div class="col-md-3">
+                  <input id="b_price" class="form-control shadow-sm" placeholder="Price" type="number" step="0.01">
+                </div>
+                <div class="col-md-2">
+                  <input id="b_stock" class="form-control shadow-sm" placeholder="Stock" type="number">
+                </div>
+                <div class="col-md-2 d-grid">
+                  <button class="btn btn-primary" onclick="addBook()">+ Add</button>
+                </div>
               </div>
             </div>
 
-            <!-- Add Book Form -->
-            <div class="row g-2 mb-3">
-              <div class="col-md-5">
-                <input id="b_title" class="form-control" placeholder="Book title">
-              </div>
-              <div class="col-md-3">
-                <input id="b_price" class="form-control" placeholder="Price" type="number" step="0.01">
-              </div>
-              <div class="col-md-2">
-                <input id="b_stock" class="form-control" placeholder="Stock" type="number">
-              </div>
-              <div class="col-md-2 d-grid">
-                <button class="btn btn-success" onclick="addBook()">+ Add</button>
-              </div>
-            </div>
-
-            <!-- Table -->
             <div class="table-responsive">
-              <table class="table table-hover align-middle mb-0">
-                <thead class="table-light">
+              <table class="table align-middle mb-0">
+                <thead>
                   <tr>
-                    <th style="width:70px;">ID</th>
-                    <th>Title</th>
-                    <th style="width:120px;">Price</th>
-                    <th style="width:120px;">Stock</th>
+                    <th>#ID</th>
+                    <th>Book Details</th>
+                    <th class="text-end">Price</th>
+                    <th class="text-center">Stock</th>
                   </tr>
                 </thead>
                 <tbody id="books">
-                  <!-- JS fills here -->
-                </tbody>
+                  </tbody>
               </table>
             </div>
 
-            <div class="small sb-muted mt-3">
-              Tip: after saving invoice, stock will update automatically.
+            <div class="mt-4 p-3 bg-light rounded-3">
+                <div class="d-flex align-items-center gap-2 text-dark opacity-50 small">
+                    <span class="fs-5">💡</span>
+                    <span>Stock updates automatically when an invoice is finalized.</span>
+                </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- RIGHT: Create Sale -->
       <div class="col-lg-5">
-        <div class="card sb-card">
-          <div class="card-body p-4">
-            <h4 class="mb-1">Create Sale</h4>
-            <div class="sb-muted small mb-3">Create invoice quickly with customer & items</div>
-
-            <div class="mb-3">
-              <label class="form-label fw-semibold">Customer</label>
-              <select id="customer" class="form-select"></select>
+        <div class="card sb-card border-0">
+          <div class="sb-card-header">
+            <h4 class="fw-bold mb-1 text-dark">Point of Sale</h4>
+            <p class="sb-muted mb-0">Generate a new sales invoice</p>
+          </div>
+          
+          <div class="card-body p-4 pt-2">
+            <div class="mb-4">
+              <label class="form-label small fw-bold text-dark opacity-75">CUSTOMER ACCOUNT</label>
+              <select id="customer" class="form-select border-2"></select>
             </div>
 
-            <div class="row g-2 mb-3">
+            <hr class="my-4 opacity-5">
+
+            <div class="row g-3 mb-3">
               <div class="col-7">
-                <label class="form-label fw-semibold">Book</label>
-                <select id="book" class="form-select"></select>
+                <label class="form-label small fw-bold text-dark opacity-75">CHOOSE BOOK</label>
+                <select id="book" class="form-select border-2"></select>
               </div>
               <div class="col-5">
-                <label class="form-label fw-semibold">Qty</label>
-                <input id="qty" class="form-control" type="number" value="1" min="1">
+                <label class="form-label small fw-bold text-dark opacity-75">QUANTITY</label>
+                <input id="qty" class="form-control border-2 text-center fw-bold" type="number" value="1" min="1">
               </div>
             </div>
 
             <div class="d-grid mb-4">
-              <button class="btn btn-outline-primary" onclick="addItem()">+ Add Item</button>
-            </div>
-
-            <div class="d-flex align-items-center justify-content-between mb-2">
-              <h5 class="mb-0">Items</h5>
-              <button class="btn btn-sm btn-light" type="button" onclick="clearItemsUI()">
-                Clear
+              <button id="addBtn" class="btn btn-primary btn-lg" onclick="addItem()">
+                <span class="me-1">Add to Cart</span>
               </button>
             </div>
 
-            <ul id="items" class="list-group mb-3">
-              <!-- JS fills here -->
-            </ul>
-
-            <div class="d-grid">
-              <button class="btn btn-primary btn-lg" onclick="createSale()">Save Invoice</button>
+            <div class="d-flex align-items-center justify-content-between mb-3">
+              <h6 class="fw-bold mb-0 text-dark">Invoice Summary</h6>
+              <button class="btn btn-sm text-danger fw-bold text-decoration-none" onclick="clearItemsUI()">
+                Clear Cart
+              </button>
             </div>
 
-            <div class="small sb-muted mt-3">
-              Note: if stock not enough, system will show error.
+            <div class="invoice-container mb-4">
+              <ul id="items" class="list-group list-group-flush">
+                <li class="list-group-item text-center py-5 text-muted small bg-transparent">
+                  <div class="fs-1 opacity-25 mb-2">🛒</div>
+                  No items in cart.
+                </li>
+              </ul>
+            </div>
+
+            <div class="grand-total-card mb-4 shadow-sm">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <p class="small text-white-50 text-uppercase fw-bold mb-1">Payable Amount</p>
+                  <h2 class="h1 fw-bold mb-0 text-info-custom" id="grand_total">$0.00</h2>
+                </div>
+                <div class="fs-1 opacity-25">💰</div>
+              </div>
+            </div>
+
+            <div class="d-grid">
+              <button id="saveInvoiceBtn" class="btn btn-success btn-lg py-3 shadow" onclick="createSale()">
+                <span class="h6 mb-0 fw-bold">Finalize Invoice</span>
+              </button>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <footer class="text-center small sb-muted mt-4">
-      © <span id="year"></span> SalesBook • Built with Bootstrap 5
+    <footer class="text-center mt-5">
+      <p class="sb-muted mb-0">© <span id="year"></span> SalesBook Pro Management. Built with PHP & AJAX Technology.</p>
     </footer>
   </div>
 
@@ -189,10 +295,16 @@
     document.getElementById("year").textContent = new Date().getFullYear();
 
     // optional helper to clear UI items
-    function clearItemsUI(){
+    function clearItemsUI() {
       if (typeof saleItems !== "undefined") saleItems = [];
       const ul = document.getElementById("items");
-      ul.innerHTML = `<li class="list-group-item sb-muted">No items yet. Add book to invoice.</li>`;
+      ul.innerHTML = `
+        <li class="list-group-item text-center py-5 text-muted small bg-transparent">
+          <div class="fs-1 opacity-25 mb-2">🛒</div>
+          No items in cart.
+        </li>`;
+      const total = document.getElementById("grand_total");
+      if(total) total.innerText = "$0.00";
     }
   </script>
 

@@ -1,0 +1,13 @@
+body{font-family:'Poppins', sans-serif;margin:0;background:#f4f6fb;}
+.sidebar{position:fixed;top:0;left:0;width:250px;height:100vh;background:#111827;padding:25px 15px;color:white;}
+.sidebar h4{font-weight:700;margin-bottom:30px;}
+.sidebar a{display:block;color:#cbd5e1;text-decoration:none;padding:10px 15px;border-radius:10px;margin-bottom:8px;font-weight:500;}
+.sidebar a:hover,.sidebar a.active{background:#1f2937;color:#fff;}
+.main{margin-left:250px;padding:30px;}
+.dashboard-card{background:white;border-radius:15px;padding:20px;box-shadow:0 5px 20px rgba(0,0,0,0.05);}
+.stat-number{font-size:24px;font-weight:700;}
+.topbar{background:white;padding:15px 25px;border-radius:15px;box-shadow:0 5px 20px rgba(0,0,0,0.05);margin-bottom:25px;}
+.profile-top{display:flex;align-items:center;gap:12px;}
+.avatar{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:700;background:#eef2ff;color:#4338ca;}
+.profile-info{line-height:1.2;}
+.small-muted{color:rgba(15,23,42,.65);}

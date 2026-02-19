@@ -75,26 +75,8 @@ $listRes = mysqli_query($conn, $listSql);
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="../public/assets/css/reports.css">
 
-<style>
-body{font-family:'Poppins',sans-serif;margin:0;background:#f4f6fb;}
-.sidebar{position:fixed;top:0;left:0;width:250px;height:100vh;background:#111827;padding:25px 15px;color:white;}
-.sidebar h4{font-weight:700;margin-bottom:30px;}
-.sidebar a{display:block;color:#cbd5e1;text-decoration:none;padding:10px 15px;border-radius:10px;margin-bottom:8px;font-weight:500;}
-.sidebar a:hover,.sidebar a.active{background:#1f2937;color:#fff;}
-.main{margin-left:250px;padding:30px;}
-.card-box{background:white;border-radius:15px;padding:20px;box-shadow:0 5px 20px rgba(0,0,0,0.05);}
-.muted{color:rgba(15,23,42,.65);}
-hr.dash{border-top:1px dashed #cbd5e1;}
-/* Print only invoice area */
-@media print{
-  body{background:#fff;}
-  .no-print{display:none !important;}
-  .sidebar{display:none !important;}
-  .main{margin:0;padding:0;}
-  .card-box{box-shadow:none;border-radius:0;}
-}
-</style>
 </head>
 <body>
 
